@@ -1,0 +1,50 @@
+---
+title: "act3"
+output: pdf_document
+author: Yakup Tezcan
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+act3 <- read.csv(file="~/actdata.csv")
+```
+```{r}
+ratio <- act3$second / act3$fourth
+
+act3 <- data.frame(cbind(act3, ratio))
+
+size <- rep(0, length(ratio))
+size[ratio>1] <- "greater than one"
+size[ratio<1] <- "less than one"
+size[ratio==1] <- "exactly one"
+
+act3 <- data.frame(cbind(act3, size))
+```
+**TASK 1**
+
+First, the pre-processing code creates a new variable called ratio(dividing second finger length by fourth finger length). Then, it adds this new variable to the dataset. After doing that, the above creates another variable called size(depending on the ratio value) and adds this new variable to the dataset.
+
+**TASK 2**
+```{r}
+#We create a new table using the size variable from dataset.
+table2 <- table(act3$sex[act3$ratio > 1])
+#Then, we call prop.table function to show the proportion of ratio which has 
+#"greater than one" value.
+prop.table(table2)
+```
+**TASK 3**
+```{r}
+#Now we know there are 38 females whose 2D:4D values are "less than one".
+table(act3$sex[act3$size=="less than one"])
+#Overall, we have n=131(first column is variables' names).
+prop.test(x=38,n=131,conf.level=0.85)
+#There was not any specific thing about p value or alternative option, so that 
+#is why I did not use them here.
+#I could use them like this p=0.5, alternative="less".
+```
+**TASK 4**
+```{r}
+#degrees of freedom =  n-1
+#0.03 = %97 confidence
+qt(p=0.03, df=44)
+```

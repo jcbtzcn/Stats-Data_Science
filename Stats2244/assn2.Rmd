@@ -1,0 +1,101 @@
+---
+title: "Yakup Tezcan"
+output:
+  pdf_document: default
+  word_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+assn2 <- read.csv(file="~/assignment.csv")
+```
+#Question1
+
+#Part a.
+```{r}
+#mean of age of participants
+mean(assn2$age)
+#median of age of participants
+median(assn2$age)
+#IQR of age of participants
+IQR(assn2$age)
+#youngest and oldest participants
+range(assn2$age)
+#variance of age of participants
+var(assn2$age)
+#standard deviation of age of participants
+sd(assn2$age)
+quantile(assn2$age)
+#female=1, male=2
+table(assn2$sex)
+#H= Humanities, LA= Law and Administration, MS= Medical Sciences,
+#SS= Social Sciences, ST= Science and Technology
+table(assn2$field)
+#1,2,3,4 and 5 represent undergraduates while 6,7 and 9 represent Phds
+table(assn2$year)
+```
+
+There were 390 participants in the questionnaire, and 290 of them were females
+while 100 of them were males. Most of the participants study their undergraduate 
+degrees, and a few works towards their PhDs. Mean of participants' age was 22.9,
+and median was 23 while the youngest participant was 19, and the oldest was 56
+years old. By looking at this summary, we immediately notice that majority of
+participants were in their early 20s, and study their bachelor’s degrees in Social
+Sciences, Law and Administration, Medical Sciences, Humanities, Science and Technology.
+
+#Part b.
+
+As we already indicated, most of the participants study their bachelor’s degrees (1,2,3,4 and 5) which can be a confounding for us. In general, cheating is thought as the main action for Academic Dishonesty. However, students who study their master’s and PhDs can engage in academic misconduct as well. (Plagiarism) Besides, almost %75 participants are females. This number is huge for a gender, because gender can have significant effects on personality traits of students. Distribution of year of study can assist us in a great way, since it is almost equally divided. Moreover, almost all the participants study in common faculties and this can help us to lower the bias among students who are in different fields.
+
+\newpage
+
+#Question 2
+
+#Part a.
+```{r}
+#Creates a new categorical variable psych_rank
+psych_rank <- rep(0,length(assn2$participant))
+#Creates the variable for very low psychopathy rank
+psych_rank[assn2$TriPM_B <= 23 & assn2$TriPM_M<=15 & assn2$TriPM_D<=24] <- 
+  "Very Low"
+#Creates the variable for high psychopathy rank
+psych_rank[assn2$TriPM_B > 23 & assn2$TriPM_M>15 & assn2$TriPM_D>24] <- "High"
+#Creates the variable for moderate psychopathy rank
+psych_rank[assn2$TriPM_B > 23 & assn2$TriPM_M>15 & assn2$TriPM_D<=24] <- 
+  "Moderate"
+psych_rank[assn2$TriPM_B > 23 & assn2$TriPM_M<=15 & assn2$TriPM_D>24] <- 
+  "Moderate"
+psych_rank[assn2$TriPM_B <= 23 & assn2$TriPM_M>15 & assn2$TriPM_D>24] <- 
+  "Moderate"
+#Creates the variable for  low psychopathy rank
+psych_rank[assn2$TriPM_B > 23 & assn2$TriPM_M<=15 & assn2$TriPM_D<=24] <- "Low"
+psych_rank[assn2$TriPM_B <= 23 & assn2$TriPM_M>15 & assn2$TriPM_D<=24] <- "Low"
+psych_rank[assn2$TriPM_B <= 23 & assn2$TriPM_M<=15 & assn2$TriPM_D>24] <- "Low"
+#Adds the new variable to the dataset
+assn2 <- data.frame(cbind(assn2,psych_rank))
+#Reorders the psych_rank variable 
+assn2$psych_rank <- factor(assn2$psych_rank, levels=c("High", "Moderate", 
+                                                      "Low", "Very Low"))
+#Displays the number of psych_rank
+table(assn2$psych_rank)
+```
+
+#Part b.
+```{r}
+assn2$psych_rank <- factor(assn2$psych_rank, levels=c("High", "Moderate", "Low",
+                                                      "Very Low"))
+#Creates a boxplot with ADS score and psych_rank
+boxplot(assn2$ADS~assn2$psych_rank, ylab="Academic Dishonesty Scale(ADS)"
+        ,psych_rank.names=c("high", "moderate", "low", "very low"), 
+        xlab="Personality traits associated with psychopathy (psych_rank)", 
+        vertical=TRUE, ylim=c(0,65),pch=(0))
+
+```
+
+Figure 1. Distribution of psych_rank variable comparing with the ADS, Academic Dishonesty Scale(out of 65). Psych_rank is determined by using three types of Triarchic Psychopathy Measure questionnaires.(Meanness, Boldness, Disinhibition) From high to very low, the graph indicates the tendency towards psychopathy that leads to academic misconduct.
+
+#Part c.
+
+By analyzing the above graph, we can say that most of the participants have low or very low psychopathy rank. This can state that the number of students who are going to engage in academic misconduct will be very low, if we conclude that there is a relation between psychopathic personality traits and academic dishonesty. However, we can obverse that ADS (Academic Dishonesty Scale) scores of some participants with low or moderate psychopathy rank are very high whereas participants with high psychopathy rank have less than 20 ADS score. By looking at the numbers of moderate and low rank, some of these scores can be considered as outliers. In addition to this, majority of the participants with very low psychopathy rank do not have high ADS scores which shows us that there is a relation between psychopathic personality traits and academic misconduct.

@@ -1,0 +1,104 @@
+---
+title: "ASSIGNMENT 4"
+author: Yakup Tezcan
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+assn4 <- read.csv(file = "assignment.csv")
+```
+```{r}
+## code to create psych_rank vector and add to dataframe
+
+# IMPORTANT: this code assumes that your dataframe is called a4
+
+# create empty vector of zeros called meanness
+# with length equivalent to original vector TriPM_M
+meanness <- rep(0, length(assn4$TriPM_M))
+# overwrite zeros in meanness vector using
+# logical operators to determine if TriPM_M is >20
+# or <= 20
+meanness[assn4$TriPM_M> 15] <- 1
+meanness[assn4$TriPM_M<= 15] <- 0
+
+# repeat process for boldness
+boldness <- rep(0, length(assn4$TriPM_B))
+boldness[assn4$TriPM_B> 23] <- 1
+boldness[assn4$TriPM_B<= 23] <- 0
+
+# repeat process for disinhibition
+dis <- rep(0, length(assn4$TriPM_D))
+dis[assn4$TriPM_D> 24] <- 1
+dis[assn4$TriPM_D<= 24] <- 0
+
+# create a 'psych_rank' vector that 'counts'
+# the number of traits that are 'high' for each
+# individual
+psych_rank <- meanness + boldness + dis
+
+# add the psych_rank variable to the a4 dataframe
+assn4 <- data.frame(cbind(assn4, psych_rank))
+```
+
+**QUESTION 1**
+
+**A**
+
+We are going to use a hypothesis test for the study and we are going to focus on Psychopathy rank(psych_rank) to evaluate whether the same pattern
+(Canada, Portugal, the UK, and the USA)is consistent for Polish students.
+
+**B**
+
+Null hypothesis($H_{0}$) = p = $p_{0}$
+
+Alternative hypothesis($H_{a}$) = p < $p_{0}$ or p > $p_{0}$ or p $\ne$ $p_{0}$
+
+The prevalence of psychopathy for Polish students will be larger than 0.045
+
+Let p the proportion of students in Polish universities whose psych_rank are 2 or 3.
+
+$H_{0}$: p = 0.045
+
+$H_{a}$: p > 0.045
+
+\newpage
+
+**QUESTION 2**
+
+**A**
+
+We are going to use a hypothesis test for the study and we are going to focus on Psychopathy rank(psych_rank) to evaluate whether the same pattern
+(Canada, Portugal, the UK, and the USA)is consistent for Polish students.
+
+**B**
+
+Null hypothesis($H_{0}$) = p = $p_{0}$
+
+Alternative hypothesis($H_{a}$) = p < $p_{0}$ or p > $p_{0}$ or p $\ne$ $p_{0}$
+
+The prevalence of psychopathy for Polish students will be larger than 0.045
+
+Let p the proportion of students in Polish universities whose psych_rank are 2 or 3.
+
+$H_{0}$: p = 0.045
+
+$H_{a}$: p > 0.045
+
+**C**
+
+```{r}
+table(assn4$psych_rank > 1)
+length(assn4$psych_rank)
+prop.test(x=36,n=390,p=0.045,alternative="greater",correct=TRUE)
+```
+
+**D**
+
+The proportion of students in Polish universities who demonstrate  psychopathic personality traits(95% CI:0.06-0.12)
+higher than that of the general adult population.(0.045)
+(Z=4.38, p=5.812e-06, n=390)
+
+
